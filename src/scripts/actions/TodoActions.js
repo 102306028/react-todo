@@ -10,76 +10,74 @@
  */
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
-var TodoConstants = require('../constants/TodoConstants');
-
+var TodoConstants = require('../constants/TodoConstants.js');
+import qs from 'querystring';
 var TodoActions = {
+  fetch() {
+     const req = new XMLHttpRequest();
+     req.open('GET', '/api/todos');
+     req.responseType = 'json';
+     req.onreadystatechange = function () {
+       if (req.readyState !== 4 || req.status !== 200) return;
 
-  /**
-   * @param  {string} text
-   */
-  create: function(text) {
-    AppDispatcher.dispatch({
-      actionType: TodoConstants.TODO_CREATE,
-      text: text
-    });
-  },
+       AppDispatcher.dispatch({
+         todos: req.response,
+         action: TodoConstants.TODO_FETCHED,
+       });
+     };
+     req.send();
+   },
 
-  /**
-   * @param  {string} id The ID of the ToDo item
-   * @param  {string} text
-   */
-  updateText: function(id, text) {
-    AppDispatcher.dispatch({
-      actionType: TodoConstants.TODO_UPDATE_TEXT,
-      id: id,
-      text: text
-    });
-  },
+   add(content) {
+     const data = qs.stringify({
+       content: content
+     });
 
-  /**
-   * Toggle whether a single ToDo is complete
-   * @param  {object} todo
-   */
-  toggleComplete: function(todo) {
-    var id = todo.id;
-    var actionType = todo.complete ?
-        TodoConstants.TODO_UNDO_COMPLETE :
-        TodoConstants.TODO_COMPLETE;
+     const req = new XMLHttpRequest();
+     req.open('POST', '/api/todos');
+     req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+     req.responseType = 'json';
+     req.onreadystatechange = function () {
+       if (req.readyState !== 4 || req.status !== 201) return;
 
-    AppDispatcher.dispatch({
-      actionType: actionType,
-      id: id
-    });
-  },
+       AppDispatcher.dispatch({
+         id: req.response.id,
+         content: content,
+         action: TodoConstants.TODO_ADDED,
+       });
+     };
+     req.send(data);
+   },
 
-  /**
-   * Mark all ToDos as complete
-   */
-  toggleCompleteAll: function() {
-    AppDispatcher.dispatch({
-      actionType: TodoConstants.TODO_TOGGLE_COMPLETE_ALL
-    });
-  },
+   remove(todoId) {
+     const req = new XMLHttpRequest();
+     req.open('DELETE', '/api/todos/' + todoId);
+     req.responseType = 'json';
+     req.onreadystatechange = function () {
+       if (req.readyState !== 4 || req.status !== 204) return;
 
-  /**
-   * @param  {string} id
-   */
-  destroy: function(id) {
-    AppDispatcher.dispatch({
-      actionType: TodoConstants.TODO_DESTROY,
-      id: id
-    });
-  },
+       AppDispatcher.dispatch({
+         todoId: todoId,
+         action: TodoConstants.TODO_REMOVED,
+       });
+     };
+     req.send();
+   },
 
-  /**
-   * Delete all the completed ToDos
-   */
-  destroyCompleted: function() {
-    AppDispatcher.dispatch({
-      actionType: TodoConstants.TODO_DESTROY_COMPLETED
-    });
-  }
+   toggleCheck(todoId) {
+     const req = new XMLHttpRequest();
+     req.open('PATCH', '/api/todos/' + todoId + '/toggleCheck');
+     req.responseType = 'json';
+     req.onreadystatechange = function () {
+       if (req.readyState !== 4 || req.status !== 204) return;
 
-};
+       AppDispatcher.dispatch({
+         todoId: todoId,
+         action: TodoConstants.TODO_TOGGLE_CHECK,
+       });
+     };
+     req.send();
+   }
+ };
 
-module.exports = TodoActions;
+ export default TodoActions;

@@ -9,14 +9,11 @@
  * TodoConstants
  */
 
-var keyMirror = require('keymirror');
+ import keyMirror from 'react/lib/keyMirror';
 
-module.exports = keyMirror({
-  TODO_CREATE: null,
-  TODO_COMPLETE: null,
-  TODO_DESTROY: null,
-  TODO_DESTROY_COMPLETED: null,
-  TODO_TOGGLE_COMPLETE_ALL: null,
-  TODO_UNDO_COMPLETE: null,
-  TODO_UPDATE_TEXT: null
-});
+ export default keyMirror({
+   TODO_FETCHED: null,
+   TODO_ADDED: null,
+   TODO_REMOVED: null,
+   TODO_TOGGLE_CHECK: null
+ });

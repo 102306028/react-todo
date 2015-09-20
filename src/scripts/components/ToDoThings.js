@@ -1,89 +1,34 @@
 var React = require('react');
-var classNames = require('classnames');
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var InputBox = require('./InputBox.js');
+import Radium from 'radium';
+import Things from './Things.js';
+import CheckButton from './CheckButton.js';
+import DeleteButton from './DeleteButton.js';
+import InputBox from './InputBox.js';
 const styles = {
   thing:{
-
+    width: '100%',
+    height: 60,
+    display: 'flex',
+    borderBottom: '1px solid #DDD'
   }
 };
-
+const T = React.PropTypes;
 const ToDoThings = React.createClass({
 
-  getInitialState: function() {
-    return {
-      isEditing: false
-    };
-  },
-
-
+  propTypes: {
+     todo: T.object.isRequired
+   },
   render() {
-    var todo = this.props.todo;
-
-    var input;
-    if (this.state.isEditing) {
-      input =
-        <TodoTextInput
-          className="edit"
-          onSave={this._onSave}
-          value={todo.text}
-        />;
-    }
     return (
       <div style={styles.thing}>
-      <li
-        className={classNames({
-          'completed': todo.complete,
-          'editing': this.state.isEditing
-        })}
-        key={todo.id}>
-        <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            checked={todo.complete}
-            onChange={this._onToggleComplete}
-          />
-          <label onDoubleClick={this._onDoubleClick}>
-            {todo.text}
-          </label>
-          <button className="destroy" onClick={this._onDestroyClick} />
-        </div>
-        {input}
-      </li>
+      <CheckButton isChecked={this.props.todo.checked} todoId={this.props.todo.id} />
+      <Things content={this.props.todo.content} />
+      <DeleteButton todoId={this.props.todo.id} />
       </div>
 
     )
   },
-  _onDoubleClick: function() {
-    this.setState({isEditing: true});
-  },
-  _onToggleComplete: function() {
-    var id = this.props.todo.id;
-    var actionType = this.props.todo.complete ?
-        'TODO_UNDO_COMPLETE' :
-        'TODO_COMPLETE';
-    AppDispatcher.dispatch({
-      actionType: actionType,
-      id: id
-    });
-  },
 
-  _onSave: function(text) {
-    AppDispatcher.dispatch({
-      actionType: 'TODO_UPDATE_TEXT',
-      id: this.props.todo.id,
-      text: text
-    });
-    this.setState({isEditing: false});
-  },
-
-  _onDestroyClick: function() {
-    AppDispatcher.dispatch({
-      actionType: 'TODO_DESTROY',
-      id: this.props.todo.id
-    });
-  }
 });
 
 module.exports = ToDoThings;

@@ -1,49 +1,61 @@
 var React = require('react');
 var ToDoListWrap = require('./ToDoListWrap.js');
-var Things = require('./Things.js');
+var ToDoThings = require('./ToDoThings.js');
 var TitleName = require('./TitleName.js');
 var Footer = require('./Footer.js');
 var TodoStore = require('../stores/TodoStore');
+import TodoActions  from '../actions/TodoActions';
 const styles = {
   all:{
-    backgroundColor:"#FFF",
-    width: "600px",
-    height: "600px"
+    width: 600,
+    border: '1px solid #DDD',
   }
 };
 
-function getTodoState() {
-  return {
-    allTodos: TodoStore.getAll(),
-    areAllComplete: TodoStore.areAllComplete()
-  };
-}
+
 
 const ToDoList = React.createClass({
-  getInitialState: function() {
-  return getTodoState();
-},
+  getInitialState() {
+    return {
+      todos: TodoStore.getTodos(),
+      collpased: false
+    }
+  },
 
-componentDidMount: function() {
-  TodoStore.addChangeListener(this._onChange);
-},
+  componentDidMount() {
+    TodoStore.addChangeListener(this.todoUpdate);
 
-componentWillUnmount: function() {
-  TodoStore.removeChangeListener(this._onChange);
-},
+    TodoActions.fetch();
+  },
+
+  componentWillUnmount() {
+    TodoStore.removeChangeListener(this.todoUpdate);
+  },
+
+  todoUpdate() {
+    this.setState({
+      todos: TodoStore.getTodos()
+    });
+  },
+
+  toggleCollapse() {
+    this.setState({
+      collpased: !this.state.collpased
+    });
+  },
 
   render() {
+    const list = this.state.collpased ? [] : this.state.todos;
     return (
       <div style={styles.all}>
       <TitleName />
-      <ToDoListWrap />
-      <Things data = {this.state} />
-      <Footer data={this.state} />
+      <ToDoListWrap isCollapsed={this.state.collpased} toggleCollapse={this.toggleCollapse}/>
+      {list.map((todo) =>{
+        return <ToDoThings todo={todo}/>
+      })}
+      <Footer />
       </div>
     )
-  },
-  _onChange: function() {
-    this.setState(getTodoState());
   }
 });
 
