@@ -1,10 +1,10 @@
 var React = require('react');
 var ToDoListWrap = require('./ToDoListWrap.js');
-var ToDoThings = require('./ToDoThings.js');
+var ToDoElements = require('./ToDoElements.js');
 var TitleName = require('./TitleName.js');
 var Footer = require('./Footer.js');
-var TodoStore = require('../stores/TodoStore');
-import TodoActions  from '../actions/TodoActions';
+var ToDoStore = require('../stores/ToDoStore');
+import ToDoActions  from '../actions/ToDoActions';
 const styles = {
   all:{
     width: 600,
@@ -17,24 +17,24 @@ const styles = {
 const ToDoList = React.createClass({
   getInitialState() {
     return {
-      todos: TodoStore.getTodos(),
+      todos: ToDoStore.getTodos(),
       collpased: false
     }
   },
 
   componentDidMount() {
-    TodoStore.addChangeListener(this.todoUpdate);
+    ToDoStore.addChangeListener(this.todoUpdate);
 
-    TodoActions.fetch();
+    ToDoActions.fetch();
   },
 
   componentWillUnmount() {
-    TodoStore.removeChangeListener(this.todoUpdate);
+    ToDoStore.removeChangeListener(this.todoUpdate);
   },
 
   todoUpdate() {
     this.setState({
-      todos: TodoStore.getTodos()
+      todos: ToDoStore.getTodos()
     });
   },
 
@@ -51,7 +51,7 @@ const ToDoList = React.createClass({
       <TitleName />
       <ToDoListWrap isCollapsed={this.state.collpased} toggleCollapse={this.toggleCollapse}/>
       {list.map((todo) =>{
-        return <ToDoThings todo={todo}/>
+        return <ToDoElements todo={todo} />
       })}
       <Footer />
       </div>

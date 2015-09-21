@@ -1,6 +1,7 @@
 import React from 'react';
-import TodoActions from '../actions/TodoActions';
-import TodoStore from '../stores/TodoStore';
+import Radium from 'radium';
+import ToDoActions from '../actions/ToDoActions';
+import ToDoStore from '../stores/ToDoStore';
 const styles = {
   wrap: {
       width: 60,
@@ -10,7 +11,7 @@ const styles = {
       justifyContent: 'center'
     },
   buttonstyle:{
-    backgroundColor: 'transparent',
+    //backgroundColor: 'transparent',
     color: '#AAA',
     border: 0,
     outline: 'none',
@@ -41,4 +42,4 @@ const DeleteButton = React.createClass({
   }
 });
 
-module.exports = DeleteButton;
+module.exports = Radium(DeleteButton);

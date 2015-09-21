@@ -3,7 +3,6 @@ import Radium from 'radium';
 import Things from './Things.js';
 import CheckButton from './CheckButton.js';
 import DeleteButton from './DeleteButton.js';
-import InputBox from './InputBox.js';
 const styles = {
   thing:{
     width: '100%',
@@ -13,7 +12,7 @@ const styles = {
   }
 };
 const T = React.PropTypes;
-const ToDoThings = React.createClass({
+const ToDoElements = React.createClass({
 
   propTypes: {
      todo: T.object.isRequired
@@ -31,4 +30,4 @@ const ToDoThings = React.createClass({
 
 });
 
-module.exports = ToDoThings;
+module.exports = Radium(ToDoElements);

@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher.js';
 import {EventEmitter} from 'events';
-import TodoConstants from '../constants/TodoConstants.js';
+import ToDoConstants from '../constants/ToDoConstants.js';
 import assign from 'object-assign';
 import _ from 'lodash';
 
@@ -8,7 +8,7 @@ const CHANGE_EVENT = 'change';
 
 let _todos = [];
 
-const TodoStore = assign({}, EventEmitter.prototype, {
+const ToDoStore = assign({}, EventEmitter.prototype, {
   emitChange() {
     this.emit(CHANGE_EVENT);
   },
@@ -30,41 +30,41 @@ AppDispatcher.register((payload) => {
   const action = payload.action;
 
   switch (action) {
-    case TodoConstants.TODO_FETCHED:
+    case ToDoConstants.TODO_FETCHED:
       _todos = payload.todos;
 
-      TodoStore.emitChange();
+      ToDoStore.emitChange();
       break;
 
-    case TodoConstants.TODO_ADDED:
+    case ToDoConstants.TODO_ADDED:
       _todos.push({
         id: payload.id,
         content: payload.content,
         checked: false
       });
 
-      TodoStore.emitChange();
+      ToDoStore.emitChange();
       break;
 
-    case TodoConstants.TODO_REMOVED:
+    case ToDoConstants.TODO_REMOVED:
       var todoIndex = _.findIndex(_todos, {
         id: payload.todoId
       });
 
       if (~todoIndex) {
         _todos.splice(todoIndex, 1);
-        TodoStore.emitChange();
+        ToDoStore.emitChange();
       }
       break;
 
-    case TodoConstants.TODO_TOGGLE_CHECK:
+    case ToDoConstants.TODO_TOGGLE_CHECK:
       var todo = _.find(_todos, {
         id: payload.todoId
       });
 
       if (todo) {
         todo.checked = !todo.checked;
-        TodoStore.emitChange();
+        ToDoStore.emitChange();
       }
       break;
   }
@@ -72,4 +72,4 @@ AppDispatcher.register((payload) => {
   return true;
 });
 
-export default TodoStore;
+export default ToDoStore;

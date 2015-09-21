@@ -19,7 +19,7 @@ const ToDoListWrap = React.createClass({
   render() {
     return (
       <div style={styles.wrap}>
-        <CheckAllButton isCheckall={this.props.isCheckall} toggleCollpse={this.props.toggleCollpse} />
+        <CheckAllButton isCollapsed={this.props.isCollapsed} toggleCollpse={this.props.toggleCollpse} />
         <InputBox />
       </div>
     )

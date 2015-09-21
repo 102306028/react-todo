@@ -2,15 +2,8 @@ var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
 
-var todos = [{
-  id: 1,
-  content: 'test todo 1',
-  checked: true
-}, {
-  id: 2,
-  content: 'test todo 2',
-  checked: false
-}];
+var todos = [];
+
 router.get('/', function (req, res) {
   res.json(todos);
 });

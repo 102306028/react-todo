@@ -32,4 +32,4 @@ const CheckAllButton = React.createClass({
   }
 });
 
-module.exports = CheckAllButton;
+module.exports = Radium(CheckAllButton);

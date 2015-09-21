@@ -25,4 +25,4 @@ const Things = React.createClass({
   }
 });
 
-module.exports = Things;
+module.exports = Radium(Things);

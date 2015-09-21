@@ -1,6 +1,6 @@
 var React = require('react');
-import TodoStore from '../stores/TodoStore.js';
-var TodoActions = require('../actions/TodoActions.js');
+import ToDoStore from '../stores/ToDoStore.js';
+var ToDoActions = require('../actions/ToDoActions.js');
 const styles = {
   wrap: {
     flex: 1
@@ -24,11 +24,11 @@ const InputBox= React.createClass({
       }
     },
     componentDidMount() {
-    TodoStore.addChangeListener(this.todoUpdate);
+    ToDoStore.addChangeListener(this.todoUpdate);
   },
 
   componentWillUnmount() {
-    TodoStore.removeChangeListener(this.todoUpdate);
+    ToDoStore.removeChangeListener(this.todoUpdate);
   },
 
   todoUpdate() {
@@ -45,7 +45,7 @@ const InputBox= React.createClass({
 
   submit(e) {
     if (e.keyCode === 13 && this.state.content) {
-      TodoActions.add(this.state.content);
+      ToDoActions.add(this.state.content);
     }
   },
   render() {
@@ -61,11 +61,7 @@ const InputBox= React.createClass({
     />
     </div>
     )
-
-  },
-
-
-
+  }
 });
 
 module.exports = InputBox;

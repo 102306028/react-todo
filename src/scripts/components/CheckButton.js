@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoActions from '../actions/TodoActions.js';
+import ToDoActions from '../actions/ToDoActions.js';
 const styles = {
   wrap: {
     width: 60,
